@@ -1,121 +1,125 @@
-# CLAUDE.md — Bean 2 Brew Demo Site (agent operating manual)
+# CLAUDE.md — build agent operating manual (Bean 2 Brew, Chennai)
 
-You are the build agent for this repo. This file is how you work. Read it once, fully, before
-touching anything else. It outranks your own instincts about "helpful" behavior — the whole point
-of this file is that the human isn't watching, so the rules have to be unambiguous.
+You are the build agent for this repo. The human is not watching. Read this file fully once per session. It overrides your instincts about "helpful" behaviour.
 
-## Document map (read in this order, every session)
+## Read order
 
-1. **`CLAUDE.md`** (this file) — how you work. Read fully, once, at the start of every session.
-2. **`STATUS.md`** — the only durable memory between sessions/loop iterations. Read it to find
-   the next `Not started` task. This is your source of truth for "where was I."
-3. **`EXECUTION_PLAN.md`** — the index only (Skill Map + phase table), a few KB. Use it to find
-   which `plan/phase-N-*.md` file matches the task `STATUS.md` says is next, then open **that one
-   phase file** — never more than one at a time. A phase file has every task for that phase; you
-   do not need the index again until you cross into the next phase.
-4. **`PRD.md`** — the spec. Read only the section a task tells you to read. Never re-read it cover
-   to cover per task; that's context you don't need and the 9B model doesn't reliably retain.
-5. **`TECH_STACK.md`** — versions, libraries, and the skill glossary. Consult it when a task names
-   a package or skill you don't recognize. Never deviate from a pinned version.
+1. **`CLAUDE.md`**: once per session.
+2. **`STATUS.md`**: the task checklist is your memory. The next task is the first `[ ]` line.
+3. **`EXECUTION_PLAN.md`**: find which `plan/phase-N-*.md` holds that task.
+4. **That one phase file**: never open a second phase file.
+5. **Only the doc sections the task's `Read:` line names:**
+   - `PRD.md`: behaviour
+   - `CONTENT.md`: every word and number
+   - `DESIGN.md`: look, motion, 3D
+   - `TECH_STACK.md`: packages, budgets, tools
+   - `ASSETS.md`: images
 
-You never need a sixth source. If something you need isn't in these five files, that is itself a
-signal: stop, write a `BLOCKED` line in `STATUS.md` explaining exactly what's missing, and move to
-the next task rather than guessing or inventing scope.
+## Who owns what
 
-## The loop algorithm
+| Topic | Owner |
+|---|---|
+| What exists and how it behaves | PRD.md |
+| Visible words, numbers, data | CONTENT.md (verbatim) |
+| Colour, type, layout, motion, 3D | DESIGN.md |
+| Packages, versions, budgets, tools | TECH_STACK.md |
+| Pass/fail | `scripts/check.sh` |
+| What's done | STATUS.md |
 
-This whole build runs as one unattended pass. The `loop` skill is what makes that non-interactive
-— invoke it once at the start of the session (see **Kickoff**, below) rather than waiting for the
-human to say "next" after every task.
+If two docs conflict, follow the owner and log the conflict under STATUS → Open issues.
 
-For **each** task, in order:
+## The loop (per task)
 
-1. Read the task's block in `EXECUTION_PLAN.md` (Files / Steps / Verify / Done) and its Skill Map
-   row, if any.
-2. If a skill is listed, invoke it via the `Skill` tool before writing code for that task.
-3. Read *only* the files the task's **Files** line names. Do not open unrelated files "just in
-   case."
-4. Make the change. One task = one small change, roughly one file. Never combine two tasks into
-   one edit, even if it looks efficient — the grain size is what keeps a single bad edit small and
-   revertible.
-5. Run the task's exact **Verify** command.
-   - **Exit 0 → pass.** Update the relevant row in `STATUS.md` (`Done`, or `Needs review` if
-     something about the result feels uncertain — see the status legend in `STATUS.md`), then
-     `git add -A && git commit -m "T#.#: <short description>"`.
-   - **Non-zero → fail.** Re-read the **Steps**, fix the specific thing that failed, retry once.
-     Still failing → do **not** try a third time. Append a line to `STATUS.md` under *Open
-     issues/blockers*: `T#.# BLOCKED: <exact error text or reason>`. Commit whatever partial,
-     non-broken state exists (or `git checkout` the file back to its last good state if the
-     partial edit leaves the build broken — a blocked task must never leave `npm run build`
-     failing for the tasks after it). Move to the next task.
-6. Move to the next task in `EXECUTION_PLAN.md` order. Do not skip ahead, and do not stop to ask
-   the human anything — see **What "never stop" actually means**, below.
+1. Read the task block (Files / Read / Tools / Steps / Check / Done).
+2. **Tools line:**
+   - Use the listed plugin, MCP or bundled command if available.
+   - For any library API you're unsure of, query Context7 before writing code.
+   - If a tool is missing, proceed without it; `STATUS.md → Tooling:` already records what exists.
+3. Touch only the files on the `Files:` line (plus `STATUS.md`, `qa/REPORT.md`). If you truly need another file, edit it and note why in STATUS → Decisions.
+4. Run `bash scripts/check.sh <task-id>`.
+   - **PASS:**
+     - Tick the task `[x]` in STATUS.md.
+     - Update the section table if relevant.
+     - `git add -A && git commit -m "T#.#: <short description>"`.
+   - **FAIL:**
+     - Read the `FAIL` line and fix exactly that.
+     - Run the check again. You get one retry. If it's still failing, use `/debug` for one more attempt.
+     - Still failing:
+       - Mark the task `[!]` in STATUS.
+       - Append under Open issues: `T#.# BLOCKED: <exact FAIL line>`.
+       - Make sure `npm run build` still passes (`git checkout -- <file>` for any file that breaks it).
+       - Commit and move on.
+5. Go to the next `[ ]` task. Never skip ahead. Never do two tasks in one commit.
 
-## Hard rules (non-negotiable, not situational)
+## Hard rules
 
-- **One task, one commit.** Never batch commits across tasks.
-- **Never change pinned versions or add a dependency.** `TECH_STACK.md` is locked; if a task
-  seems to need something not already in `package.json`, that's a BLOCKED, not a `npm install`.
-- **JavaScript only.** No `.ts`/`.tsx` files, ever, regardless of what feels more natural.
-- **Zero network calls from the two forms**, ever. No `fetch(`, no `XMLHttpRequest`, no `axios`,
-  no hardcoded third-party URL in `Newsletter.jsx` or `ContactSection.jsx`. This is checked
-  mechanically in T6.2/T6.3 but hold the line on every task that touches those files, not just
-  the end.
-- **Do not re-open anything marked `DECIDED`** in `PRD.md` (hero effect, map provider, contact
-  destination, palette, fonts, studio credit). Changing a `DECIDED` item requires a human edit to
-  `PRD.md` itself — you don't have the authority, even if you think you've found a better option.
-- **Do not edit `PRD.md` or `TECH_STACK.md`.** You read them, never write them. `EXECUTION_PLAN.md`
-  and every file under `plan/` are also read-only during the loop (they're the plan, not the log).
-  The only doc you write to during the loop is `STATUS.md`.
-- **One phase file open at a time.** `EXECUTION_PLAN.md` was split into `plan/phase-N-*.md` files
-  specifically to keep per-turn token usage low on a small local model. Opening a second phase
-  file "to check ahead," or re-reading the full index after you already have your phase file open,
-  defeats that — don't.
-- **`STATUS.md` is the only durable memory.** If it isn't written there, it didn't happen as far
-  as the next loop iteration (or the human checking in later) is concerned. Update it every task,
-  not just at phase checkpoints.
-- **Never remove a required PRD section to save time.** If a phase is taking much longer than
-  expected, re-scope *down* in ambition (simpler visual treatment, fewer particles, a plainer
-  fallback) rather than cutting scope the PRD requires. Log the re-scope decision in `STATUS.md`.
-- **A blocked task must never break the build for later tasks.** If your two attempts leave
-  `npm run build` failing, revert the file before moving on.
+- **JS/JSX only.**
+- **Packages:** only TECH_STACK §2–§3. Never change a version after T0.2. Never `npm install` anything else. That case is BLOCKED.
+- **Zero runtime network from our code:**
+  - None of `fetch(`, XHR, `axios`, `sendBeacon`, `WebSocket` or `EventSource` anywhere in `src/`.
+  - The only external things are the OSM iframe and outbound links.
+  - Forms are local state only (PRD §15).
+- **3D is procedural:**
+  - No `.glb`/`.gltf`/`.hdr`/image textures.
+  - No drei helpers that download (`preset=`, `useGLTF`, remote fonts).
+- **Read-only for you:**
+  - `CLAUDE.md`, `PRD.md`, `CONTENT.md`, `DESIGN.md`, `TECH_STACK.md`, `ASSETS.md`, `KICKOFF.md`, `EXECUTION_PLAN.md`
+  - `plan/**`
+  - `scripts/**` (check.sh, make-fallback-art.mjs, loop-guard.sh), `SINGLE_LOOP.md`
+  - `.claude/settings.json`
+  - Never weaken or edit a check.
+- **Copy comes from CONTENT.md verbatim.** A missing string gets the minimal neutral wording and a `Copy added:` note.
+- **Never call image/video generation tools.** Imagery is human-supplied (ASSETS.md).
+- **Follow DESIGN §5 (motion budget) and §9 (anti-template).** Adding motion not in §5 counts as a bug.
+- **Re-scope down, never cut:** simpler visuals are acceptable; missing PRD sections are not. The hero has defined tiers (PRD §6).
+- **Git:** never `git push`, `git reset --hard`, force, or rewrite history.
 
-## What "never stop" actually means
+## Browser QA (Playwright MCP)
 
-You do not pause to ask the human anything mid-loop. That includes: which of two reasonable
-interpretations to pick (pick the one closer to the PRD's literal wording and note the assumption
-in `STATUS.md`), whether a BLOCKED task should be retried a third time (no — log it, move on), and
-whether to proceed after a checkpoint task (yes, always, straight into the next phase).
+1. **Serve the production build** (run it in the background):
+   ```bash
+   npm run build && npx vite preview --port 4173 --strictPort
+   ```
+2. **Open** `http://localhost:4173`.
+3. **Viewports:** 375×812, 768×1024, 1024×768, 1440×900.
+4. **Overflow test** at each width:
+   ```js
+   document.documentElement.scrollWidth > window.innerWidth
+   ```
+   It must be `false`.
+5. **Write findings** in `qa/REPORT.md` under a heading `## T#.#`:
+   - what you checked
+   - what failed
+   - what you fixed
+6. Screenshots are optional and gitignored.
+7. Stop the preview server when done.
 
-The loop stops **only** at one of these:
+If Playwright is unavailable:
+- Do the check by code inspection.
+- Write `## T#.#` with "Playwright unavailable — code-inspected only".
+- Set the related section to `Needs review`.
 
-1. **T6.5 completes** — final report written to `STATUS.md`, final commit made, ≤10-line summary
-   printed. This is the normal, intended stop.
-2. **Every remaining task is BLOCKED** — if you reach a point where the next task and all tasks
-   after it are blocked on the same unresolved external thing (e.g., no Vercel auth *and* that
-   somehow blocks something else, which it shouldn't per T6.4's own design), stop and say so
-   plainly rather than looping without progress.
+## Stop conditions (the only ones)
 
-A single blocked task is never a stop condition. T6.4 (deploy) is explicitly designed to never
-block anything — an unauthenticated Vercel CLI produces a `STATUS.md` note, not a halt.
+1. **T6.6 is complete.** Print a summary of at most 10 lines.
+2. **The kickoff message scoped the run "through Phase N"** and that phase's checkpoint task is `[x]`. Print a summary of at most 5 lines. (Not used in single-loop mode, where the scope is always T6.6.)
+3. **Every remaining task is blocked by the same external cause.** Say so plainly.
 
-## Git conventions
+Otherwise never stop to ask. For an ambiguity, pick the reading closest to the docs' literal wording and log it under STATUS → Decisions.
 
-- Commit message format: `T#.#: <short description>` (e.g. `T2.4: menu filtering + card layout`).
-- Checkpoint commits (T2.13, T3.5, T4.7, T5.6, T6.3): `T#.#: phase N checkpoint`.
-- Never force-push, never rewrite history, never `git reset --hard` past your own last commit.
+## Single-loop mode (SINGLE_LOOP.md)
 
-## Kickoff (paste this once, at the very start of the session)
+- A Stop hook (`scripts/loop-guard.sh`) runs whenever you try to end your turn. While `[ ]` tasks remain, it blocks the stop and names the next task.
+- Treat its message as the human's instruction: continue with the named task. Don't argue with it and don't summarise first.
+- **Re-read `CLAUDE.md` and `STATUS.md`:**
+  - at every phase start
+  - after any context compaction
+  - Details from earlier phases may be gone after a compaction. STATUS.md is the truth.
+- **Keep context lean:**
+  - Don't paste large files or build logs back into the conversation.
+  - Read the check's last line, not the whole log.
 
-See the message below this file for the exact prompt. In short: bootstrap permissions once
-(`fewer-permission-prompts` → `update-config`), then invoke `loop`, then work through
-`EXECUTION_PLAN.md`'s phase index one phase file at a time using the algorithm above, stopping
-only per **What "never stop" actually means**.
+## Resuming
 
-## If you are a hosted model taking over mid-loop
-
-If the human has switched you in after the 9B model got stuck (per `TECH_STACK.md`'s local-LLM
-operating notes), do not restart from T0.1. Read `STATUS.md`, find the first `Not started` or
-`BLOCKED` row, resume from there. You may re-attempt a previously `BLOCKED` task once, since a
-stronger model may succeed where the 9B model didn't — if you fix it, update the `STATUS.md` row
-and remove it from the open-issues log (marked resolved, not deleted).
+- A new session starts at the first `[ ]` task.
+- You may retry each `[!]` task once when resuming. If it's fixed, mark it `[x]` and mark its Open-issues line `(resolved)`. Don't delete the line.

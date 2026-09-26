@@ -1,62 +1,109 @@
-# Status — Bean 2 Brew Demo Site
+# STATUS — Bean 2 Brew, Chennai
 
-> Update this file at the end of every task. Keep entries short and factual — this is a tracker, not a journal. The build agent reads it at the start of every loop iteration.
+> The agent's only memory. Update it after every task. The next task is the first `[ ]` below.
+> Legend: `[ ]` not started · `[x]` done · `[!]` blocked (see Open issues)
 
-**Last updated:** 2026-09-26 (Phase 2 in progress — T2.1 complete)
+**Last updated:** (agent fills)
+**Current phase:** 0
+**Tooling:** (T0.3 fills: playwright=?, context7=?, frontend-design=?, devtools=?)
+**Resolved versions:** (T0.2 fills: lenis, fonts)
+**Hero 3D:** (T3.5 fills: Tier A/B/C + reason)
+**Bundle:** (T4.10/T5.6 fill: entry=… total=… bytes gz)
+**Deploy:** (T6.5 fills)
 
-**Overall phase:** Phase 2 — Static skeleton
+## Task checklist
 
-## Section-by-section status
+**Phase 0 — scaffold**
+- [ ] T0.1 Hand-written scaffold
+- [ ] T0.2 Install pinned deps + build
+- [ ] T0.3 Tooling inventory
+
+**Phase 1 — foundations**
+- [ ] T1.1 Tokens, fonts, base CSS
+- [ ] T1.2 site.js
+- [ ] T1.3 menu.js
+- [ ] T1.4 process.js + reviews.js
+- [ ] T1.5 Fallback art
+- [ ] T1.6 assets.js manifest
+- [ ] T1.7 env.js helpers
+- [ ] T1.8 Page shell
+
+**Phase 2 — sections (static)**
+- [ ] T2.1 Header + mobile menu + skip link
+- [ ] T2.2 Hero (static)
+- [ ] T2.3 Menu board + tabs
+- [ ] T2.4 Process (vertical)
+- [ ] T2.5 Story
+- [ ] T2.6 Gallery grid
+- [ ] T2.7 Reviews
+- [ ] T2.8 reservation.js logic
+- [ ] T2.9 Reserve flow UI
+- [ ] T2.10 Visit + contact form
+- [ ] T2.11 Footer + newsletter
+- [ ] T2.12 Mobile reserve bar
+- [ ] T2.13 Compose page
+- [ ] T2.14 Phase 2 checkpoint (browser QA + review)
+
+**Phase 3 — hero 3D**
+- [ ] T3.1 PourScene: vessels + lighting
+- [ ] T3.2 Stream, froth, steam, progress
+- [ ] T3.3 Pointer parallax + offscreen pause
+- [ ] T3.4 Fallback + gated lazy mount
+- [ ] T3.5 Perf + tier decision
+- [ ] T3.6 Phase 3 checkpoint
+
+**Phase 4 — motion**
+- [ ] T4.1 Lenis + GSAP setup
+- [ ] T4.2 Preloader + hero intro
+- [ ] T4.3 Hero pin → pour progress
+- [ ] T4.4 Process horizontal scroll
+- [ ] T4.5 Header states + mobile menu motion
+- [ ] T4.6 Menu filter animation
+- [ ] T4.7 Reservation transitions
+- [ ] T4.8 Gallery lightbox
+- [ ] T4.9 Reduced-motion audit
+- [ ] T4.10 Phase 4 checkpoint (budget + QA)
+
+**Phase 5 — a11y, SEO, perf**
+- [ ] T5.1 Accessibility pass
+- [ ] T5.2 Keyboard + screen-reader QA
+- [ ] T5.3 SEO, OG, JSON-LD, favicon
+- [ ] T5.4 Analytics slot
+- [ ] T5.5 Images + CLS
+- [ ] T5.6 Budget + simplify
+- [ ] T5.7 Phase 5 checkpoint
+
+**Phase 6 — ship**
+- [ ] T6.1 Copy + anti-template audit
+- [ ] T6.2 Forms security review
+- [ ] T6.3 Final checks
+- [ ] T6.4 Final visual QA
+- [ ] T6.5 Deploy (conditional)
+- [ ] T6.6 Final report
+
+## Sections
 
 | Section | Status | Notes |
 |---|---|---|
-| Design direction (palette, type, mood) | Done | Locked per `PRD.md` §6; tokens committed in `src/index.css` |
-| Project scaffold (Vite/React/Tailwind) | Done | Committed: Vite 8.3.1 / React 19.3.0 / Tailwind 4.3.3 + all deps pinned + lockfile; `npm run build` verified |
-| Header / Navigation | Done | T2.1: desktop nav + mobile overlay complete; T4.1 (scroll transition) pending |
-| Hero (3D/fluid centerpiece) | Done | T2.2: static hero with final copy, 3D mount point ready for T3.x |
-| Menu (filterable, 10 items across 4 categories) | Done | T2.3-T2.4: complete with all 10 items, 5 filter buttons working |
-| Our Story | Done | T2.5: complete with PRD copy verbatim + stat row |
-| Gallery (lightbox) | Not started | 6 images (T2.6) + lightbox (T4.4) |
-| Visit Us (address, hours, map) | Not started | Map decided: OpenStreetMap iframe (T2.7) |
-| Newsletter / Community | Not started | Mock/no-op submission (T2.8) |
-| Contact form | Not started | Decided: dedicated mini-section (T2.9) |
-| Footer (4-column + bottom bar) | Not started | Studio credit: Brewworks Studio (T2.10) |
-| Reduced-motion / low-power fallback | Not started | Must cover hero (T3.2) and all motion (T4.5) |
-| SEO meta tags (title/description/OG) | Not started | T5.2 |
-| Analytics placeholder hook | Not started | T5.3 |
-| Mobile performance pass | Not started | T2.12 + T4.6 + T5.4/T5.5 |
-| Deployment (Vercel/Netlify) | Not started | T6.4 (conditional on authenticated CLI) |
-| Images (SVG placeholder set) | Done | T1.3: 8 hand-drawn SVGs created; T1.4: image worker not configured (SVG placeholders in use) |
+| Header / mobile menu | Not started | |
+| Hero (3D pour) | Not started | |
+| Menu board | Not started | |
+| Process | Not started | |
+| Story | Not started | |
+| Gallery + lightbox | Not started | |
+| Reviews | Not started | |
+| Reservation | Not started | |
+| Visit + contact | Not started | |
+| Footer + newsletter | Not started | |
+| Mobile reserve bar | Not started | |
+| Motion system | Not started | |
+| SEO / JSON-LD | Not started | |
+| Images | Fallback art | Real images per ASSETS.md (human) |
 
-## Status legend
+## Open issues / blockers
 
-* **Not started** — no implementation work completed.
-* **In progress** — actively being built.
-* **Needs review** — implemented, but requires review before being treated as complete.
-* **Done** — matches the relevant PRD specification.
-* **Blocked** — work cannot proceed until the issue in Notes/Open Issues is resolved.
+- None yet.
 
-## Open issues / blockers log
+## Decisions
 
-*(The build agent appends `T#.# BLOCKED: <reason>` lines here. Do not delete resolved issues; mark them resolved.)*
-
-* None yet.
-
-## Decisions made along the way
-
-*(Record decisions not already locked in `PRD.md`/`TECH_STACK.md`.)*
-
-* 2026-09-25 — Docs refined from `PRD.txt`/`TECH_STACK.txt`/`EXECUTION_PLAN.txt`/`STATUS.txt`; the four `.txt` files are superseded by the `.md` versions.
-* 2026-09-25 — Scaffold committed with pinned versions (verified 2026-09-25 against npm registry). Phase 0 is now verification-only.
-* 2026-09-26 — `CLAUDE.md` rewritten as the full agent operating manual (loop algorithm, hard rules, stop conditions, git conventions). `TECH_STACK.md` and `EXECUTION_PLAN.md` updated to reference native Claude Code skills (Skill tool) instead of the external `freshtechbro/claudedesignskills` marketplace — nothing to install; see `EXECUTION_PLAN.md` § Skill Map and `TECH_STACK.md` § Claude Code skills used in this build.
-* 2026-09-26 — `EXECUTION_PLAN.md` split: it is now a ~2KB index (purpose, Skill Map, phase table); the actual task bodies moved to `plan/phase-0-environment.md` through `plan/phase-6-polish-pitch.md`, one file per phase. Done to fix context-window overflow on the 12GB-VRAM local model — a single task-read now costs a few KB instead of ~30KB. `CLAUDE.md`'s read order and hard rules updated to match (open one phase file at a time; never the whole plan).
-
-## Images / swappable content
-
-* Default image set: 8 hand-written SVGs in `public/img/` (created in T1.3), palette-only, cohesive.
-* Upgrade path: `tools/gen_image.sh` (image model **TBD** — see `tools/README.md`). Used only if `--selftest` exits 0 (T1.4).
-* All imagery is placeholder/demo content; never present as real photos of a real business.
-
-## Demo-data reminder
-
-All business information on this site — address, phone, email, hours, menu, and social handles — is fictional demo content defined in `PRD.md` §§8 and 11. Do not replace it with a real client's information
+- 2026-09-26: Docs rewritten for the $5,000 Chennai version. This is a fresh repo; the previous Springfield build is retired.

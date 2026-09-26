@@ -1,17 +1,70 @@
 {
   "permissions": {
     "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(bash scripts/check.sh:*)",
+      "Bash(node scripts/make-fallback-art.mjs)",
+      "Bash(npm install:*)",
       "Bash(npm run build)",
-      "Bash(npm install)",
-      "Bash(node -v)",
-      "Bash(grep *)",
-      "Bash(test *)",
-      "Bash(find *)",
-      "Bash(wc *)",
-      "Bash(gzip *)",
-      "Bash(for *)",
-      "Bash(command -v *)",
-      "Bash(npx vercel *)"
+      "Bash(npm run dev:*)",
+      "Bash(npm run preview:*)",
+      "Bash(npx vite preview:*)",
+      "Bash(node:*)",
+      "Bash(git init)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git checkout -- :*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(wc:*)",
+      "Bash(gzip:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(test:*)",
+      "mcp__playwright",
+      "mcp__context7",
+      "Bash(command -v vercel)",
+      "Bash(npx --no-install vercel:*)",
+      "Bash(vercel whoami)",
+      "Bash(npx vercel:*)",
+      "mcp__chrome-devtools"
+    ],
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm -rf:*)",
+      "Bash(npm uninstall:*)",
+      "mcp__higgsfield",
+      "Edit(PRD.md)",
+      "Edit(CONTENT.md)",
+      "Edit(DESIGN.md)",
+      "Edit(TECH_STACK.md)",
+      "Edit(ASSETS.md)",
+      "Edit(CLAUDE.md)",
+      "Edit(KICKOFF.md)",
+      "Edit(EXECUTION_PLAN.md)",
+      "Edit(plan/**)",
+      "Edit(scripts/**)",
+      "Edit(.claude/**)",
+      "Edit(SINGLE_LOOP.md)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/loop-guard.sh\""
+          }
+        ]
+      }
     ]
   }
 }

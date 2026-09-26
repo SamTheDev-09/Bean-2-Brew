@@ -1,133 +1,94 @@
-# Tech Stack — Bean 2 Brew Demo Site
+# TECH STACK — packages, tooling, budgets
 
-**Scope:** Supports the full-scope premium $2,000-tier PRD. See `PRD.md` for requirements and `EXECUTION_PLAN.md` for implementation order.
-
-## Guiding principle
-
-Pick the smallest stack that satisfies every functional requirement in the PRD — not the biggest possible stack. Every extra library adds context overhead for the local model and another surface area for breakage.
-
-**The stack below is pinned and already committed** (`package.json` + `package-lock.json` + working scaffold). The build agent must not change versions, add dependencies, or re-scaffold.
-
-## Environment
+## 1. Environment and model
 
 | Item | Requirement |
 |---|---|
-| Node.js | **22 LTS** (Vite 8 requires `^20.19.0 || >=22.12.0`). Check: `node -v` |
+| Node.js | 22 LTS (`node -v`). Vite 8 needs `^20.19.0 \|\| >=22.12.0` |
+| Shell | bash. On Windows, Claude Code uses Git Bash; `scripts/check.sh` needs it |
 | Git | any recent version |
-| Language | **JavaScript (`.jsx`) — not TypeScript.** Do not add `.ts`/`.tsx` files. |
+| Language | JavaScript/JSX only. No `.ts`/`.tsx` |
+| Model | Hosted Claude via Claude Code. **Opus is recommended for Phases 3–4** (3D shader + GSAP choreography). Sonnet is fine for 0–2 and 5–6. Do not run this build on a small local model. |
 
-## Core stack (pinned — verified 2026-09-25)
+## 2. Pinned core (exact versions, installed with `--save-exact` in T0.2)
 
-| Layer | Package | Pinned version | Notes |
-|---|---|---|---|
-| Build tool | `vite` | **8.3.1** | dev server + static build |
-| React plugin | `@vitejs/plugin-react` | **6.1.1** | pairs with Vite 8 |
-| UI framework | `react` / `react-dom` | **19.3.0** | R3F 9.x requires React 19 |
-| Styling | `tailwindcss` + `@tailwindcss/vite` | **4.3.3** | v4 is CSS-first: tokens live in the `@theme` block in `src/index.css` (already committed). There is **no** `tailwind.config.js`. |
-| 3D | `three` | **0.186.1** | used only for the hero steam field |
-| 3D React | `@react-three/fiber` | **9.8.1** | declarative R3F |
-| 3D helpers | `@react-three/drei` | **10.7.9** | installed for availability; the hero uses raw R3F + a code-generated texture — do not pull in drei helpers that fetch external assets |
-| Scroll animation | `gsap` | **3.15.0** | + built-in `ScrollTrigger` plugin (no separate package) |
-| Micro-interactions | `framer-motion` | **13.4.4** | import from `framer-motion`. **Do not install the `motion` package** — that is a different package name for a different workflow and would break imports. |
-| Lightbox | `yet-another-react-lightbox` | **3.32.2** | default controls already include arrows, Esc, click-outside close |
-| Fonts | `@fontsource/fraunces` / `@fontsource/inter` | **5.3.0** | self-hosted; already imported in `src/main.jsx`. No Google Fonts `<link>` — do not add one. |
-
-## Functional-requirement choices
-
-| Requirement | Choice | Notes |
+| Package | Version | Use |
 |---|---|---|
-| Menu category filtering | Plain React state | small dataset; no filter library |
-| Gallery lightbox | `yet-another-react-lightbox` | default controls = arrows + Esc + outside-click |
-| Map embed | **OpenStreetMap iframe, no API key** | exact URL is in task T2.7. Google Maps Embed API is the only alternative and is **not** used (it needs a key). |
-| Contact + newsletter handling | Mock/no-op handlers, inline success | **No Formspree, no endpoint, no fetch — ever** for this demo. |
-| Form validation | Native HTML5 + React state | no form library |
-| SEO meta tags | Hand-written in `index.html` | single page; no `react-helmet-async` |
-| Analytics-ready hook | Commented `<!-- ANALYTICS SLOT -->` in `index.html` `<head>` | not live |
-| Reduced motion | shared `prefersReducedMotion()` in `src/lib/motion.js` | must gate R3F, GSAP, Framer Motion **and** CSS animations (see tasks T3.2, T4.2, T4.3, T4.5) |
+| react, react-dom | 19.3.0 | UI |
+| vite | 8.3.1 (dev) | build/dev server |
+| @vitejs/plugin-react | 6.1.1 (dev) | JSX |
+| tailwindcss, @tailwindcss/vite | 4.3.3 (dev) | CSS-first styling. Tokens live in `@theme` in `src/index.css`. There is no `tailwind.config.js` |
+| three | 0.186.1 | hero only |
+| @react-three/fiber | 9.8.1 | hero scene |
+| @react-three/drei | 10.7.9 | **only** `Environment` + `Lightformer`. Nothing that downloads assets (no presets, `useGLTF`, remote fonts, `Text`) |
+| gsap | 3.15.0 | ScrollTrigger (pins/scrub) + SplitText (hero lines). Both ship inside the `gsap` package |
+| framer-motion | 13.4.4 | layout/exit animations, `MotionConfig`. Import from `framer-motion`. Do **not** install `motion` |
+| yet-another-react-lightbox | 3.32.2 | gallery lightbox; import its `styles.css` |
 
-## Explicitly not used
+## 3. Allowed additions (latest at install time, `--save-exact`, versions recorded in STATUS)
 
-- **Babylon.js / PlayCanvas** — overkill for one hero moment.
-- **Spline / Rive / Lottie** — external asset pipelines; not needed.
-- **Locomotive Scroll** — only if native scroll + ScrollTrigger proves insufficient (it won't).
-- **CMS / backend / payment** — outside PRD scope; content is hardcoded fictional data.
-- **Formik / React Hook Form** — forms are tiny.
-- **TypeScript** — deliberate choice to minimize failure surface for the 9B build agent.
+| Package | Use | If install fails |
+|---|---|---|
+| lenis | smooth scroll synced to the GSAP ticker | BLOCKED (T0.2) |
+| @fontsource/rozha-one | display face | use `@fontsource/fraunces@5.3.0` + log |
+| @fontsource/hind-madurai | body + Tamil | use `@fontsource/inter@5.3.0` + log |
 
-## Claude Code skills used in this build
+**Nothing else may be installed.** A task that seems to need another package is BLOCKED, not `npm install`.
 
-**Superseded note:** an earlier draft of this file referenced installing skills from an external
-marketplace (`freshtechbro/claudedesignskills`). That is **dropped**. This build instead uses the
-**native skills already available in this Claude Code installation** — nothing to install, nothing
-to verify exists, zero marketplace risk. The build agent invokes them with the `Skill` tool by
-name, exactly as it would invoke any other tool.
+## 4. Explicitly not used
 
-Only skills relevant to this PRD are listed below (the installation has many more; the agent
-should not reach for skills outside this list unless a task explicitly says to). The authoritative
-per-task mapping — which skill(s) to invoke for which `T#.#` — lives in `EXECUTION_PLAN.md` under
-**Skill Map**; this table is the reference/glossary for what each one is for.
+- **These libraries:**
+  - `motion` (different package)
+  - `@react-three/postprocessing` (bundle cost)
+  - Spline, Lottie, Rive
+  - Locomotive Scroll
+  - react-helmet
+  - form libraries
+  - date-picker libraries (native `<input type="date">` plus a custom slot grid is enough)
+  - TypeScript
+- **Anything network-bound:** any backend, CMS, analytics script, or form relay.
 
-| Skill | Used for |
+## 5. Claude Code tooling
+
+**Bundled, nothing to install:**
+
+| Command | Used for |
 |---|---|
-| `init` | Phase 0 sanity-check of the existing scaffold |
-| `run` | Launching the dev server to eyeball the hero (T3.4) and pre-deploy check (T6.4) |
-| `loop` | Driving the whole T0.1→T6.5 sequence as one self-paced, non-interactive run |
-| `fewer-permission-prompts` | Session bootstrap — configure the repo so file edits/commands don't stall on prompts mid-loop |
-| `update-config` | Session bootstrap — apply the permission/hook settings above |
-| `design`, `design-system`, `ui-styling`, `ui-ux-pro-max`, `brand` | Phase 1 tokens/imagery and general layout/spacing judgment calls in Phase 2 |
-| `svg-animation` | The scroll-cue bounce (T2.2) and any SVG-level motion |
-| `threejs-webgl`, `react-three-fiber`, `threejs-impl-react-three-fiber`, `threejs-syntax-materials`, `threejs-syntax-geometries`, `lightweight-3d-effects` | Hero build, Phase 3 (T3.1–T3.4) |
-| `threejs-errors-rendering`, `threejs-errors-performance` | Debugging the hero if it fails to render or drops below 30fps (T3.3, T3.4) |
-| `60fps-animation` | Perf tuning the hero and the bundle-budget pass (T3.4, T4.6) |
-| `accessible-animation` | Every reduced-motion gate: hero fallback, GSAP reveals, Framer hover states, lightbox (T3.2, T4.2, T4.4, T4.5) |
-| `gsap-scrolltrigger`, `gsap-web` | Scroll reveals and header transition (T4.1, T4.2) |
-| `motion-framer`, `micro-interaction` | Hover/tap feedback and the lightbox interaction feel (T4.3, T4.4) |
-| `glassmorphism` | Optional treatment for the header's solid-on-scroll background blur (T4.1) — cosmetic only, skip if it fights the contrast rule in `PRD.md` §6 |
-| `simplify` | Dead-code cleanup and bundle trimming (T4.6, T5.5, T6.1) |
-| `code-review` | Every phase checkpoint (T2.13, T3.5, T4.7, T5.6, T6.3) — review the diff since the last checkpoint before marking the phase `Done` |
-| `security-review` | Confirming the forms make zero network calls and the deploy has no leaked secrets (T6.2, T6.3) |
+| `/run`, `/verify` | launching and eyeballing the app when Playwright isn't enough |
+| `/code-review` | every phase checkpoint |
+| `/security-review` | T6.2 |
+| `/simplify` | T5.6 |
+| `/debug` | any task stuck after one failed attempt |
 
-**Do not invoke:** `dataviz`, `claude-api`, `banner-design`, `slides`, `apple-design`,
-`artifact-design`, `artifact-diagramming`, `ascii-animation`, `page-transition-animation`,
-`lottie-animation`, `threejs-impl-xr`, `threejs-impl-webgpu`, `threejs-impl-physics`,
-`threejs-impl-audio`, `threejs-impl-ifc-viewer`, `locomotive-scroll`, `keybindings-help` — none of
-these apply to a single-page cafe site and loading them only burns context on a 9B model.
+**Plugins (install once, see KICKOFF.md):**
 
-## Performance budget — non-negotiable
+| Plugin | Why |
+|---|---|
+| `frontend-design@claude-plugins-official` | design judgement for every UI task; keeps output away from template looks |
+| `context7@claude-plugins-official` | current docs for R3F 9, drei 10, GSAP 3.15 (SplitText/ScrollTrigger), Lenis, framer-motion 13, Tailwind 4, which can be newer than the model's training |
 
-- **Total JS payload:** < **400 KB gzipped** across all of `dist/assets/*.js`. Measure: `for f in dist/assets/*.js; do gzip -c "$f"; done | wc -c`
-- **3D:** procedural only — no glTF/Draco assets at all (the hero is a points cloud with a code-generated sprite texture). 60fps target on a mid-tier phone; dpr capped at 1.75.
-- **Images:** SVG (default set) or WebP (if the image worker is configured). Every `<img>` gets explicit dimensions.
-- **Motion fallback:** `prefers-reduced-motion` → static hero + no reveals; content must never be invisible or broken in that mode.
+**MCP servers:**
 
-## Local LLM operating notes
+| Server | Status | Why |
+|---|---|---|
+| Playwright (`@playwright/mcp`) | **required** | the agent opens the built site, checks 4 breakpoints, tests forms, keyboard path, lightbox, and the 3D hero |
+| Chrome DevTools (`chrome-devtools-mcp`) | optional | performance traces for the hero's fps and LCP (T3.5, T4.10) |
+| Higgsfield (`https://mcp.higgsfield.ai/mcp`) | optional, **asset session only** | photoreal images per ASSETS.md. **Blocked in the build loop** by `.claude/settings.json` (it spends credits) |
 
-Claude Code runs against a **9B local model**. Keep this in mind every loop:
+**If a tool is unavailable:** do the task without it and record it in `STATUS.md` → `Tooling:`.
 
-- One task = one small change = one commit (see `EXECUTION_PLAN.md`).
-- Read only the files a task lists. Do not re-read whole docs every iteration.
-- If a task produces broken output two times, mark it BLOCKED and move on — the loop must never stall.
-- If the model repeatedly emits broken tool calls, the human operator may switch that step to a hosted model (add a provider/route in the `claude-code-router` config) and resume the loop from `STATUS.md`.
+## 6. Budgets (checked by `scripts/check.sh`)
 
-## Deployment
+| Metric | Limit |
+|---|---|
+| Entry chunk `dist/assets/index-*.js`, gzipped | < 280,000 bytes |
+| All `dist/assets/*.js`, gzipped | < 700,000 bytes |
+| Hero 3D | lazy chunk (`React.lazy`), never in the entry chunk |
+| Each photo in `src/assets/img/` | ≤ 350 KB, long edge ≤ 1600px |
+| LCP (hero text) | < 2.5s on throttled mobile (checked by trace if DevTools MCP is present) |
+| Hero frame rate | ≥ 30fps on a mid-range profile, else tier down (PRD §6) |
 
-Static build: `npm run build` → `dist/`.
-Deploy target: **Vercel** free tier (or Netlify). Task T6.4 runs `npx vercel --yes --prod` only if the CLI is already authenticated on the machine; otherwise it records the exact follow-up in `STATUS.md`.
+## 7. Deployment
 
-## Image pipeline (sub-agent) — model TBD
-
-The image worker is a **pluggable component**: fixed interface, model not yet chosen.
-
-- Contract: `tools/gen_image.sh <prompt> [reference_image] <output_path>` (exit 0 = success; 3 = not configured).
-- Details, VRAM strategies, and the 8 prompt list: `tools/README.md`.
-- The build loop uses it **only** if `tools/gen_image.sh --selftest` exits 0 (task T1.4); otherwise the committed SVG placeholders are the final image set. Nothing in the plan depends on the image worker.
-
-## Source-of-truth rules
-
-- `PRD.md` defines **what must exist**.
-- `TECH_STACK.md` defines **how it is built** — versions pinned; no deviations in-loop.
-- `EXECUTION_PLAN.md` defines **when and in what order** — it's an index; the actual task bodies live one-per-phase under `plan/phase-N-*.md` to keep per-task reads small on a 12–14B local model.
-- `STATUS.md` defines **what is actually done / blocked**.
-- `CLAUDE.md` defines **how the agent works**.
-
-When documents appear to conflict: do not silently change scope. Record the conflict in `STATUS.md` (Open issues) and follow the file listed above that owns the topic.
+- `npm run build` produces `dist/`. Target is Vercel.
+- T6.5 deploys only if `vercel whoami` succeeds; otherwise it logs the exact command for the human.

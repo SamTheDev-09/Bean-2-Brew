@@ -1,209 +1,274 @@
-# Product Requirements Document — Bean 2 Brew Demo Site
+# PRD — Bean 2 Brew, Chennai (premium demo site)
 
-**Positioning:** Premium small-business web package (~$2,000 tier). This document defines what “premium” means for the demo so scope is explicit and nothing is quietly cut during the build.
+**Positioning:** sales demo for a **$5,000-tier** café/restaurant website package.
+**Business:** Bean 2 Brew, a fictional specialty café on 3rd Avenue, Besant Nagar, Chennai.
+**Status:** every item marked `DECIDED` is locked. The build agent never re-opens a DECIDED item. Changing one requires a human edit to this file.
 
-> **Refinement note (2026-09-25):** the open questions that previously lived in §7, §10, §14, §16 and §20 are now **resolved** (marked `DECIDED`). The build agent must not re-open them; changes require a human edit to this file.
+Companion docs:
+- `CONTENT.md` holds every word and number on the site. It is used verbatim.
+- `DESIGN.md` covers look, motion and 3D art direction.
+- `TECH_STACK.md` covers packages and budgets.
+- `ASSETS.md` covers imagery.
+
+---
 
 ## 1. Purpose
 
-Build a complete, production-quality single-site demo for a fictional cafe, **Bean 2 Brew**, to pitch local cafes/restaurants on a premium web package. Every section below should be built as if a real client were paying for it: no lorem ipsum, no visible “TBD” placeholders in the final pitch version, and no section that feels like an unfinished stub.
+This is a complete, production-grade single-page site for a fictional café. It is used to show local café and restaurant owners what $5,000 buys. It is built as if a real client paid for it:
+- no lorem ipsum
+- no stubs
+- no dead links
+- no fake functionality presented as real
 
-## 2. What “premium, $2,000” means here
+## 2. What "$5,000" commits to
 
-A $2,000 small-business site is not a template with a new logo. It commits to:
+| Commitment | Where |
+|---|---|
+| A signature 3D moment tied to the business: the Madras "metre pour" of filter kaapi between a brass tumbler and dabara, driven by scroll | §6 |
+| Two scroll-driven set pieces (hero pour, estate-to-dabara process) plus smooth scrolling | §6, §8 |
+| A working reservation flow: date, time slots, party size, details, review, confirmation, calendar file | §12 |
+| A menu that feels like the café's board, with animated filtering | §7 |
+| Mobile designed on purpose: full-screen menu, sticky "Reserve a table" bar, simplified set pieces | §5, §16 |
+| Local SEO: CafeOrCoffeeShop structured data, OG/Twitter cards, bilingual touch (Tamil) | §16 |
+| Accessible and fast: reduced-motion path, keyboard-complete, JS budget met | §16 |
+| Honest demo: fictional business, forms that send nothing, labelled clearly | §15, §17 |
 
-* **Custom-built sections:** every section below is bespoke to this brand’s content and layout.
-* **A real signature interaction:** the 3D/fluid hero is a meaningful design moment, not just a stock hero image.
-* **Working business essentials:** navigation, contact flow, hours/location, menu, social proof, newsletter capture, SEO basics, and an analytics-ready structure.
-* **Responsive design at all breakpoints:** the mobile experience should look intentionally designed, not merely compressed.
-* **Fast, accessible, and SEO-sound delivery:** a premium site should not be slow, inaccessible, or difficult for search engines to understand.
-* **No dead ends:** every link, button, and form either performs its intended demo action or is clearly identified as a demo stand-in (see Section 8 and Section 17).
+## 3. Audience, goals, non-goals
 
-## 3. Audience
+**Audience:**
+- **Primary:** café and restaurant owners in Chennai and other Indian metros.
+- **Secondary:** anyone the link is forwarded to.
 
-* **Primary:** local cafe/restaurant owners evaluating whether to commission a website.
-* **Secondary:** anyone the demo is forwarded to.
+**Goals:**
+- Create a wow moment in the first 3 seconds.
+- An owner can name at least three concrete features they don't have today.
+- The site runs smoothly on a mid-range Android phone.
 
-## 4. Goals
+**Non-goals (DECIDED):**
+- No real bookings, payments, CMS, backend, accounts or multi-page routing.
+- No real customer data leaves the browser.
 
-* Create a “wow” moment within 3 seconds via the hero.
-* Make the $2,000 value visible through concrete details such as the menu experience, contact flow, mobile navigation, and polish — not only through the 3D effect.
-* Perform well on a mid-range phone.
-* Remain fully self-contained and demo-safe: no real payments and no real personal-data collection.
+## 4. Sitemap (DECIDED)
 
-## 5. Non-Goals
+Single page. Sections in this exact order, with these exact ids:
 
-* No real ordering, payment, or reservation backend.
-* No CMS/admin panel; content is hardcoded for the demo.
-* No multi-location support or user accounts.
-
-## 6. Brand Brief — “Bean 2 Brew”
-
-* **Vibe:** warm, artisanal, a little playful.
-* **Palette (DECIDED — locked to these values):** cream `#F5EDE2`, espresso brown `#3B2A20`, terracotta `#C97C4B`, muted sage `#7C8B6F` as a secondary accent.
-* **Typography (DECIDED — locked):** Fraunces (display serif for headlines) + Inter (humanist sans for body/UI), self-hosted via `@fontsource`.
-* **Voice:** warm, sensory, never salesy. Short sentences. First-person plural (“we”) for the cafe’s own voice.
-* **Contrast rule (locked):** body text is espresso-on-cream only; terracotta is for large text/graphics only; sage is decorative/large only; the footer is cream text on espresso.
-
-## 7. Sitemap — DECIDED
-
-Single-page scroll site with anchor-linked sections:
-
-```text
-Header (sticky)
- ├─ Hero (#hero)
- ├─ Menu (#menu)
- ├─ Our Story (#story)
- ├─ Gallery (#gallery)
- ├─ Visit Us (#visit)
- ├─ Contact (#contact)        ← dedicated mini-section, NOT a modal
- └─ Newsletter / Community (#newsletter)
-Footer (site-wide)
+```
+Header (sticky)                       skip link → #main
+<main id="main">
+  #hero      Hero: the metre pour (3D)
+  #menu      The board (menu)
+  #process   From estate to dabara (4 steps)
+  #story     Why we pour it long
+  #gallery   A look inside (lightbox)
+  #reviews   What regulars say
+  #reserve   Reserve a table (3-step flow)
+  #visit     Find us (map, hours, contact form)
+</main>
+Footer, containing #newsletter (Roast notes)
+MobileReserveBar (mobile only)
+Preloader (first visit per session)
 ```
 
-The header includes a **Contact** navigation item. **DECIDED:** Contact is implemented as its own dedicated mini-section (`#contact`, spec in §17) placed between Visit Us and Newsletter — simpler and more robust than a modal for this build.
+**Navigation:**
+- Nav items: Menu (#menu), The pour (#process), Story (#story), Gallery (#gallery), Visit (#visit).
+- Primary CTA: "Reserve a table" (#reserve).
 
-## 8. Fictional business content
+## 5. Global behaviour
 
-All business information below is fictional demo data and is used site-wide. The build agent copies it verbatim and invents nothing new.
+- **Header:**
+  - Transparent over the hero.
+  - Solid decoction background once scrolled past 24px.
+  - Hides on scroll down and shows on scroll up (after the hero).
+  - The active section's nav link gets `aria-current="true"`.
+- **Mobile menu (< lg):**
+  - Full-screen overlay with the same links and the CTA.
+  - Touch targets ≥ 44px.
+  - Esc and any link close it.
+  - Focus moves into the overlay and returns to the button on close.
+- **MobileReserveBar (< md):**
+  - Fixed bottom bar with "Reserve a table".
+  - Hidden while #hero or #reserve is in view.
+- **Smooth scroll:**
+  - Lenis on desktop and mobile. Anchor links scroll smoothly with a header offset.
+  - Disabled under reduced motion.
+- **Preloader:**
+  - Shown once per browser session, ≤ 1.8s, never blocks content longer.
+  - Skipped under reduced motion.
+- **Skip link:** "Skip to content" → #main, visible on focus.
 
-* **Business name:** Bean 2 Brew
-* **Tagline:** “Slow mornings, made right.”
-* **Address:** 142 Maple Street, Riverside Corner, Springfield, IL 62704
-* **Phone:** (555) 201-2837 (tel link: `tel:+15552012837`)
-* **Email:** hello@bean2brew.com
-* **Hours:** Mon–Fri 7:00am–7:00pm · Sat–Sun 8:00am–8:00pm
-* **Social handles (demo/placeholder):** @bean2brew (Instagram `https://instagram.com/bean2brew`, TikTok `https://tiktok.com/@bean2brew`), `https://facebook.com/bean2brew`
-* Contact and newsletter submissions must remain demo-safe: mock/no-op handler, inline success, **zero network calls**. No relay service is used in this demo build.
+## 6. Hero — the metre pour (DECIDED)
 
-## 9. Header / Navigation — full spec
+**Copy:** CONTENT §2. The h1 is the page's only `<h1>`.
 
-* **Logo:** “Bean 2 Brew” wordmark (text-based, left-aligned), linking to the top of the page.
-* **Desktop nav items:** Menu · Our Story · Gallery · Visit Us · Contact
-* **Primary CTA:** “Visit Us Today” → scrolls to Visit Us.
-* **Behavior:**
-  * Transparent/overlaid on the hero.
-  * Transitions to a solid background + drop shadow on scroll (task T4.1).
-  * Remains sticky during subsequent scrolling.
-  * Active-section highlighting (IntersectionObserver, `aria-current`) — included, not just nice-to-have.
-* **Mobile:** hamburger icon → full-screen menu with the same destinations, large touch targets (minimum 44px), and the CTA repeated at the bottom.
+**Signature interaction:** a procedural React Three Fiber scene.
+- A brass tumbler (upper) pours filter kaapi in a long stream into a brass dabara (lower). Froth builds in the dabara and steam rises.
+- Scroll drives `progress` 0 → 1 while the hero is pinned:
+  - the tumbler rises
+  - the stream lengthens
+  - the froth peaks
+- The pointer adds a subtle parallax tilt on desktop.
+- Everything is procedural: lathe geometry, a code-generated sprite texture, a local Lightformer environment.
+- **No** external models, HDRs or textures. Art direction is in DESIGN §6.
 
-## 10. Hero Section — full spec
+**Quality tiers (de-risk rule, DECIDED):**
 
-* **Headline:** “Slow Mornings, Made Right.” (the page’s only `<h1>`)
-* **Subheadline:** “Small-batch coffee, baked fresh daily, poured with care in the heart of Riverside Corner.”
-* **Primary CTA:** “See Our Menu” → scrolls to Menu.
-* **Secondary CTA:** “Get Directions” → scrolls to Visit Us.
-* **Signature interaction (DECIDED):** **ambient particle/steam field** — a procedural R3F points cloud with a code-generated soft sprite, slow upward drift. No external 3D model, no glTF, no lights. This candidate was chosen over the liquid-pour shader and the rotating cup because it has no asset pipeline, is cheap on a mid-tier phone, and degrades to a static gradient+CSS-steam fallback cleanly.
-  * **Fallback (required):** `prefers-reduced-motion` or missing WebGL → static hero (gradient + CSS steam), same layout.
-  * **De-risk rule:** if the effect is not stable after 2 attempts, ship the static fallback and record the deferral in `STATUS.md` (task T3.4).
-* **Scroll cue:** small animated down-arrow at the bottom of the hero.
-
-## 11. Menu Section — full spec
-
-**Section intro:** “What We’re Pouring”
-
-**Subhead:** “A few favorites — the full menu’s even bigger in person.”
-
-Categories: **Coffee · Tea · Pastries · Seasonal** (filter row adds an “All” default)
-
-| Item                             | Category | Price | One-line description                         |
-| -------------------------------- | -------- | ----: | -------------------------------------------- |
-| House Drip                       | Coffee   | $3.25 | Rotating single-origin, brewed fresh all day |
-| Vanilla Bean Latte               | Coffee   | $4.75 | Espresso, steamed milk, real vanilla bean    |
-| Maple Cortado                    | Coffee   | $4.25 | Equal parts espresso and milk, local maple   |
-| Cold Brew Float                  | Coffee   | $5.50 | 24-hour cold brew, vanilla bean ice cream    |
-| Honey Lavender Latte             | Coffee   | $5.25 | Espresso, local honey, house lavender syrup  |
-| Chai Tea Latte                   | Tea      | $4.50 | House-spiced chai, steamed milk              |
-| Iced Matcha                      | Tea      | $4.75 | Ceremonial-grade matcha, oat milk option     |
-| Almond Croissant                 | Pastries | $3.75 | Baked fresh each morning                     |
-| Cinnamon Sourdough Toast         | Pastries | $4.00 | House sourdough, brown butter cinnamon sugar |
-| Pumpkin Spice Cortado (Seasonal) | Seasonal | $4.75 | Fall-only, real pumpkin, house spice blend   |
-
-Each item card contains the name, price, one-line description, and a small circular badge (item initial in category color).
-
-Category filtering must work client-side with no page reload.
-
-Note under the grid:
-
-> “Menu is seasonal and subject to change — see us in person for the full lineup.”
-
-## 12. Our Story Section — full spec
-
-* **Heading:** “Why We Started Pouring”
-* **Body copy:**
-
-  1. “Bean 2 Brew started with a simple idea: mornings should feel slower, even in a fast town. We roast in small batches, bake before sunrise, and pour every cup like it’s the only one we’re making that day.”
-  2. “We’re a neighborhood spot first — regulars know their order before they reach the counter, and we like it that way. Come sit for a while.”
-* **Supporting visual:** `public/img/story-space.*` (SVG placeholder or image-worker output — tracked as swappable content in `STATUS.md`).
-* **Stat row:** “Est. 2019” · “Locally Roasted” · “Family Owned”
-
-## 13. Gallery Section — full spec
-
-* **Heading:** “A Look Inside”
-* 6-image grid covering interior, drinks, pastries, pouring, exterior, and window seating.
-* Lightbox (task T4.4, `yet-another-react-lightbox` default controls): enlarge, arrow navigation, close on Esc or click-outside.
-* Images are placeholders for the demo; they are tracked as swappable content in `STATUS.md` and must not be presented as real photos of a real business.
-
-## 14. Visit Us Section — full spec
-
-* **Heading:** “Come Say Hi”
-* **Address:** 142 Maple Street, Riverside Corner, Springfield, IL 62704
-* **Phone:** (555) 201-2837; `tel:` link.
-* **Hours:** Mon–Fri 7:00am–7:00pm · Sat–Sun 8:00am–8:00pm
-* **Map (DECIDED):** **OpenStreetMap iframe embed** — no API key, no paid dependency. Exact embed URL is pinned in task T2.7.
-* **Directions CTA:** “Get Directions” → opens the address in Google Maps (keyless search URL, pinned in T2.7), new tab.
-
-## 15. Newsletter / Community Section — full spec
-
-* **Heading:** “Stay in the Loop”
-* **Subhead:** “First look at seasonal drinks, pop-up events, and the occasional free-pastry day.”
-* **Form fields:** Email (required and validated), Submit button labeled “Subscribe”.
-* **Success state:** inline confirmation `You're on the list — see you at the counter.` with no page reload.
-* **Demo behavior:** mock/no-op handler. No email is stored or forwarded. No relay service is used in this demo build.
-
-## 16. Footer — full spec
-
-Site-wide footer:
-
-* **Column 1 — Brand:** “Bean 2 Brew” wordmark + tagline + address.
-* **Column 2 — Quick Links:** Menu · Our Story · Gallery · Visit Us · Contact.
-* **Column 3 — Contact:** phone (`tel:`), email (`mailto:hello@bean2brew.com`), hours summary.
-* **Column 4 — Social:** Instagram, Facebook, TikTok icons/links to the demo handles in §8.
-* **Bottom bar:** “© 2026 Bean 2 Brew. All rights reserved.” + “Site design by **Brewworks Studio**” (DECIDED: fictional studio name, stored as one constant in `Footer.jsx` so a human can swap it in one line before a real pitch).
-
-## 17. Contact & Forms — functional requirements
-
-* **Contact destination (DECIDED):** dedicated mini-section `#contact` (spec in §7), heading “Say Hello”, fields Name, Email, Message, Submit.
-* Client-side validation: required fields, valid email format, inline error messages.
-* **Newsletter form:** as specified in Section 15.
-* **Demo data handling rule (locked):** neither form may send data to a real inbox, database, or third-party list. No `fetch(`, no XHR, no third-party endpoint — the success state is local React state. This is non-negotiable for the demo build; if a live pitch later requires delivery, a human adds a disposable relay explicitly (never a real client inbox).
-* Contact success line: “Thanks — we'll be in touch. (Demo form: nothing is actually sent.)”
-
-## 18. Non-functional requirements
-
-* **Performance:** first meaningful content visible in <2.5s on throttled mobile; JS budget per `TECH_STACK.md` (<400KB gzipped).
-* **Responsive breakpoints:** mobile (base), tablet (≥768px), desktop (≥1024px), large desktop (≥1440px). Every section checked at all four (task T2.12).
-* **Accessibility:** semantic HTML landmarks, alt text on all images, visible focus states, correct heading order (one `<h1>`), WCAG AA contrast for body text, reduced-motion fallbacks for the hero and all animations (tasks T3.2, T4.5, T5.1).
-* **SEO basics:** unique `<title>`, meta description, Open Graph tags (title/description/image), one `<h1>` (the hero headline), semantic heading order (task T5.2).
-* **Analytics-ready:** one commented insertion point `<!-- ANALYTICS SLOT -->` in `index.html` `<head>`; nothing live (task T5.3).
-* **Browser support:** current Chrome, Safari, Firefox, Edge. No IE/legacy support.
-
-## 19. Success Criteria
-
-* A cafe owner can point to at least three specific elements (for example, the hero, menu filter, or mobile nav) and identify visible value versus a basic small-business site.
-* Every section in this document is present, functional, and populated with real (if fictional) content in the pitch version; zero visible placeholder copy remains.
-* The site meets the performance and accessibility requirements in Section 18.
-* Both forms validate, display success states, and remain isolated from real customer/client data.
-
-## 20. Risks / Open Questions — RESOLVED
-
-| Original open question | Resolution | Where |
+| Tier | What renders | When |
 |---|---|---|
-| Hero 3D effect | Ambient particle/steam field (procedural R3F), static fallback required | §10, tasks T3.1–T3.5 |
-| Map provider | OpenStreetMap iframe (no key) | §14, task T2.7 |
-| Contact destination | Dedicated mini-section `#contact` | §7, §17, task T2.9 |
-| Photography | SVG placeholder set committed (cohesive, palette-only); image-worker upgrade path via `tools/gen_image.sh` if configured | tasks T1.3–T1.4 |
-| Palette/typography | Locked to §6 values | §6 |
+| A | Full pour: tumbler, stream, froth, steam, scroll + pointer | Default |
+| B | Tumbler + dabara composition with steam; no stream or froth; scroll still rotates the pair | Tier A still broken or < 30fps after 2 attempts (T3.5) |
+| C | `HeroFallback`: SVG line art of tumbler + dabara, CSS steam (static under reduced motion) | Reduced motion, no WebGL, while the 3D chunk loads, or Tier B also fails |
 
-Remaining risk, owned by the plan: the 9B build agent may need the BLOCKED-and-continue protocol (see `CLAUDE.md`) — the plan is designed so any single blocked task never stops the loop.
+The layout is identical in every tier. The tier shipped is recorded in `STATUS.md`.
+
+## 7. Menu — "The board"
+
+- **Data:** 13 items across 4 categories (CONTENT §3). Tabs: All (default), Kaapi, Espresso bar, Chai and coolers, Bakes.
+- **Filtering:**
+  - Client-side, no reload.
+  - Tabs are a proper `tablist` with arrow-key navigation.
+  - Items animate in and out with a layout transition.
+  - The active tab has a sliding brass indicator.
+- **Presentation:**
+  - A café menu board, not cards: name, dotted leader, price in ₹, description below. Tags where given.
+  - Footnote from CONTENT §3.
+
+## 8. Process — "From estate to dabara"
+
+- Four steps (CONTENT §4), each with an image, step number, title and text. Numbers are allowed because this is a true sequence.
+- **≥ 1024px:** the section pins and the four panels move horizontally with scroll (scrub).
+- **< 1024px or reduced motion:** a vertical stack with no pin.
+
+## 9. Story — "Why we pour it long"
+
+- Copy: CONTENT §5.
+- An arched-top image (story-counter).
+- A three-fact line.
+
+## 10. Gallery — "A look inside"
+
+- 8 images (ASSETS.md), mixed aspect ratios, responsive grid.
+- Each tile is a button: "Open image N of 8".
+- Lightbox uses `yet-another-react-lightbox` default controls: arrows, Esc, click-outside close, swipe.
+
+## 11. Reviews — "What regulars say"
+
+- 3 fictional quotes with first name and neighbourhood (CONTENT §7).
+- No avatars or faces.
+- Covered by the site-wide fictional disclaimer (§17).
+
+## 12. Reservation — "Reserve a table" (DECIDED: demo-only, local state)
+
+**Step 1 — When:**
+- **Date:** today → today + 30 days.
+- **Time:** 30-minute slots from 7:00 am to 9:30 pm (30 slots). For today, slots earlier than now + 30 minutes are disabled.
+- **People:** a 1–8 stepper. At 8, show "For bigger groups, call us." with the tel link.
+- **Seating:** Indoor or Verandah (default Indoor).
+
+**Step 2 — Who:**
+- **Full name:** required, ≥ 2 characters.
+- **Mobile number:** required, Indian mobile. Accepts spaces, dashes and an optional +91 / 91 / 0 prefix. 10 digits starting 6–9.
+- **Email:** optional, validated if present.
+- **Occasion:** optional select.
+- **Notes:** optional textarea, max 200 characters, with a live counter.
+
+**Step 3 — Check and confirm:**
+- Summary of every field, each with an "Edit" link back to its step.
+- The "Confirm reservation" button.
+
+**Confirmation:**
+- Heading "Reservation confirmed".
+- A generated reference `B2B-XXXX` (4 chars from `A–H J–N P–Z 2–9`).
+- The demo notice.
+- "Add to calendar": downloads a `.ics` file built in the browser (Blob). Start time is IST converted to UTC (minus 5h30), duration 90 min, location = café address.
+- "Make another reservation": resets the flow.
+
+**Live token:**
+- On desktop, a kraft "token" beside the form mirrors the chosen date, time, people and seating as they change.
+- On confirmation it shows the reference and a kumkum stamp.
+
+**Validation and accessibility:**
+- Errors show on Continue/Confirm attempts, inline under each field, linked with `aria-describedby`.
+- Focus moves to the first invalid field.
+- On each step change, focus moves to the step heading.
+- The confirmation is announced via `aria-live="polite"`.
+
+**Logic:** lives in `src/lib/reservation.js` as pure functions (see phase-2 T2.8 for the exact API). UI in `src/components/reserve/ReserveSection.jsx`.
+
+## 13. Visit — "Find us on 3rd Avenue"
+
+- **Details:** address, hours, phone (tel:), email (mailto:) from CONTENT §1.
+- **Map (DECIDED):** OpenStreetMap iframe, no API key. The exact URL is in CONTENT §1. `title` attribute from CONTENT §9.
+- **"Get directions":** Google Maps search URL (CONTENT §1), new tab, `rel="noopener"`.
+- **"Write to us" contact form:**
+  - Fields: Name, Email, Message (all required, email validated).
+  - Inline errors; inline success with the demo notice.
+
+## 14. Footer and newsletter
+
+- **Footer:** four groups (CONTENT §10) plus the bottom bar, including the fictional-café disclaimer and the `STUDIO` credit.
+- **Newsletter "Roast notes" (#newsletter):**
+  - One email field (required, validated), "Subscribe".
+  - Inline success plus the demo notice.
+
+## 15. Forms data-handling rule (DECIDED, non-negotiable)
+
+- No form sends data anywhere. That covers reservation, contact and newsletter.
+- None of the following anywhere in `src/`:
+  - `fetch(`
+  - `XMLHttpRequest`
+  - `axios`
+  - `sendBeacon`
+  - `WebSocket`
+  - `EventSource`
+- Success states are local React state.
+- A live pitch that needs delivery is a later, human-made change and never points at a real client inbox.
+
+## 16. Non-functional requirements
+
+- **Performance:**
+  - Hero text visible (LCP) < 2.5s on throttled 4G mid-range mobile.
+  - JS budget per TECH_STACK §6.
+  - 3D chunk lazy-loaded.
+  - The canvas pauses when the hero is off-screen.
+  - dpr ≤ 1.75 (1.25 on low-power devices).
+- **Responsive:** 375, 768, 1024 and 1440 widths all look designed. No horizontal overflow at 375.
+- **Accessibility:**
+  - Landmarks; one h1; h2 per section; h3 for menu item names and step titles.
+  - Visible focus; labelled fields; WCAG AA contrast (DESIGN §2 pairs).
+  - Full keyboard path.
+  - Reduced motion: no Lenis, no pins, no preloader, no SplitText, Tier C hero, instant transitions. All content visible.
+- **SEO (in `index.html`):**
+  - unique title and meta description
+  - OG and Twitter tags
+  - `CafeOrCoffeeShop` JSON-LD
+  - SVG favicon
+- **Analytics:** one `<!-- ANALYTICS SLOT ... -->` comment in `<head>`. Nothing live.
+- **Browsers:** current Chrome, Safari (incl. iOS), Firefox, Edge.
+
+## 17. Demo honesty rules (DECIDED)
+
+- The footer states the café is fictional and credits `STUDIO` (CONTENT §10).
+- AI-generated images are never presented as real photos of a real business. The disclaimer covers them. No generated human faces.
+- Reviews are fictional (covered by the disclaimer).
+- The phone number is deliberately non-dialable.
+- The address uses a fictional door number on a real street. The map points at the street, not a building.
+
+## 18. Success criteria
+
+- Every section in §4 is present, populated from CONTENT.md, and working.
+- `bash scripts/check.sh final` passes.
+- A reviewer can complete a reservation on mobile with keyboard or touch and download the `.ics`.
+- The hero ships at Tier A, or Tier B with the reason logged.
+
+## 19. Decisions log
+
+| Item | Decision |
+|---|---|
+| Price tier | $5,000 |
+| Location | 3rd Avenue, Besant Nagar, Chennai 600090 (fictional door no.) |
+| Hero | Procedural metre-pour, tiers A/B/C |
+| Map | OpenStreetMap iframe |
+| Reservation | 3-step demo flow + .ics, local only |
+| Contact | Form inside #visit |
+| Palette/type | DESIGN §2–3 |
+| Studio credit | `STUDIO` constant in `src/data/site.js` |
