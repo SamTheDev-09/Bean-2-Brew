@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(claude --version)",
-      "Bash(npm *)"
+      "Bash(npm *)",
+      "Skill(fewer-permission-prompts)"
     ]
   },
   "enabledPlugins": {

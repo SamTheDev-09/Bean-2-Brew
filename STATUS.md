@@ -48,8 +48,8 @@
 
 * 2026-09-25 — Docs refined from `PRD.txt`/`TECH_STACK.txt`/`EXECUTION_PLAN.txt`/`STATUS.txt`; the four `.txt` files are superseded by the `.md` versions.
 * 2026-09-25 — Scaffold committed with pinned versions (verified 2026-09-25 against npm registry). Phase 0 is now verification-only.
-* 2026-09-25 — Pinned decisions table added to `CLAUDE.md` (map, contact destination, hero effect, palette, fonts, forms, studio credit, image fallback).
 * 2026-09-26 — `CLAUDE.md` rewritten as the full agent operating manual (loop algorithm, hard rules, stop conditions, git conventions). `TECH_STACK.md` and `EXECUTION_PLAN.md` updated to reference native Claude Code skills (Skill tool) instead of the external `freshtechbro/claudedesignskills` marketplace — nothing to install; see `EXECUTION_PLAN.md` § Skill Map and `TECH_STACK.md` § Claude Code skills used in this build.
+* 2026-09-26 — `EXECUTION_PLAN.md` split: it is now a ~2KB index (purpose, Skill Map, phase table); the actual task bodies moved to `plan/phase-0-environment.md` through `plan/phase-6-polish-pitch.md`, one file per phase. Done to fix context-window overflow on the 12GB-VRAM local model — a single task-read now costs a few KB instead of ~30KB. `CLAUDE.md`'s read order and hard rules updated to match (open one phase file at a time; never the whole plan).
 
 ## Images / swappable content
 

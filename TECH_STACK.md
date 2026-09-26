@@ -126,7 +126,7 @@ The image worker is a **pluggable component**: fixed interface, model not yet ch
 
 - `PRD.md` defines **what must exist**.
 - `TECH_STACK.md` defines **how it is built** — versions pinned; no deviations in-loop.
-- `EXECUTION_PLAN.md` defines **when and in what order**.
+- `EXECUTION_PLAN.md` defines **when and in what order** — it's an index; the actual task bodies live one-per-phase under `plan/phase-N-*.md` to keep per-task reads small on a 12–14B local model.
 - `STATUS.md` defines **what is actually done / blocked**.
 - `CLAUDE.md` defines **how the agent works**.
 

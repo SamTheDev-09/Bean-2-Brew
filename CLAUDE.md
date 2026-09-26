@@ -9,8 +9,10 @@ of this file is that the human isn't watching, so the rules have to be unambiguo
 1. **`CLAUDE.md`** (this file) — how you work. Read fully, once, at the start of every session.
 2. **`STATUS.md`** — the only durable memory between sessions/loop iterations. Read it to find
    the next `Not started` task. This is your source of truth for "where was I."
-3. **`EXECUTION_PLAN.md`** — the task list. Find the task `STATUS.md` says is next; read *only*
-   that task's block, plus the **Skill Map** table at the top.
+3. **`EXECUTION_PLAN.md`** — the index only (Skill Map + phase table), a few KB. Use it to find
+   which `plan/phase-N-*.md` file matches the task `STATUS.md` says is next, then open **that one
+   phase file** — never more than one at a time. A phase file has every task for that phase; you
+   do not need the index again until you cross into the next phase.
 4. **`PRD.md`** — the spec. Read only the section a task tells you to read. Never re-read it cover
    to cover per task; that's context you don't need and the 9B model doesn't reliably retain.
 5. **`TECH_STACK.md`** — versions, libraries, and the skill glossary. Consult it when a task names
@@ -63,8 +65,12 @@ For **each** task, in order:
   destination, palette, fonts, studio credit). Changing a `DECIDED` item requires a human edit to
   `PRD.md` itself — you don't have the authority, even if you think you've found a better option.
 - **Do not edit `PRD.md` or `TECH_STACK.md`.** You read them, never write them. `EXECUTION_PLAN.md`
-  is also read-only during the loop (it's the plan, not the log). The only doc you write to during
-  the loop is `STATUS.md`.
+  and every file under `plan/` are also read-only during the loop (they're the plan, not the log).
+  The only doc you write to during the loop is `STATUS.md`.
+- **One phase file open at a time.** `EXECUTION_PLAN.md` was split into `plan/phase-N-*.md` files
+  specifically to keep per-turn token usage low on a small local model. Opening a second phase
+  file "to check ahead," or re-reading the full index after you already have your phase file open,
+  defeats that — don't.
 - **`STATUS.md` is the only durable memory.** If it isn't written there, it didn't happen as far
   as the next loop iteration (or the human checking in later) is concerned. Update it every task,
   not just at phase checkpoints.
@@ -102,8 +108,9 @@ block anything — an unauthenticated Vercel CLI produces a `STATUS.md` note, no
 ## Kickoff (paste this once, at the very start of the session)
 
 See the message below this file for the exact prompt. In short: bootstrap permissions once
-(`fewer-permission-prompts` → `update-config`), then invoke `loop`, then execute `EXECUTION_PLAN.md`
-top to bottom using the algorithm above, stopping only per **What "never stop" actually means**.
+(`fewer-permission-prompts` → `update-config`), then invoke `loop`, then work through
+`EXECUTION_PLAN.md`'s phase index one phase file at a time using the algorithm above, stopping
+only per **What "never stop" actually means**.
 
 ## If you are a hosted model taking over mid-loop
 
