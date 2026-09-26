@@ -2,7 +2,7 @@
 
 > Update this file at the end of every task. Keep entries short and factual — this is a tracker, not a journal. The build agent reads it at the start of every loop iteration.
 
-**Last updated:** 2026-09-26 (Phase 1 complete; moving to Phase 2)
+**Last updated:** 2026-09-26 (Phase 2 in progress — T2.1 complete)
 
 **Overall phase:** Phase 2 — Static skeleton
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | Design direction (palette, type, mood) | Done | Locked per `PRD.md` §6; tokens committed in `src/index.css` |
 | Project scaffold (Vite/React/Tailwind) | Done | Committed: Vite 8.3.1 / React 19.3.0 / Tailwind 4.3.3 + all deps pinned + lockfile; `npm run build` verified |
-| Header / Navigation | Not started | T2.1 (menu), T4.1 (scroll transition + active section) |
+| Header / Navigation | Done | T2.1: desktop nav + mobile overlay complete; T4.1 (scroll transition) pending |
 | Hero (3D/fluid centerpiece) | Not started | Effect decided: ambient steam field (T3.x); static fallback required |
 | Menu (filterable, 10 items across 4 categories) | Not started | Content locked in `PRD.md` §11 (T2.3/T2.4) |
 | Our Story | Not started | Copy locked in `PRD.md` §12 (T2.5) |
