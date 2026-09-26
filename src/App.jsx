@@ -1,5 +1,6 @@
 import Header from './components/Header'
 import Hero from './components/Hero'
+import MenuSection from './components/MenuSection'
 
 function App() {
   return (
@@ -8,9 +9,7 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <section id="menu" className="scroll-mt-20">
-          <h2>What We're Pouring</h2>
-        </section>
+        <MenuSection />
         <section id="story" className="scroll-mt-20">
           <h2>Why We Started Pouring</h2>
         </section>

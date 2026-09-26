@@ -14,7 +14,7 @@
 | Project scaffold (Vite/React/Tailwind) | Done | Committed: Vite 8.3.1 / React 19.3.0 / Tailwind 4.3.3 + all deps pinned + lockfile; `npm run build` verified |
 | Header / Navigation | Done | T2.1: desktop nav + mobile overlay complete; T4.1 (scroll transition) pending |
 | Hero (3D/fluid centerpiece) | Done | T2.2: static hero with final copy, 3D mount point ready for T3.x |
-| Menu (filterable, 10 items across 4 categories) | Not started | Content locked in `PRD.md` §11 (T2.3/T2.4) |
+| Menu (filterable, 10 items across 4 categories) | Done | T2.3-T2.4: complete with all 10 items, 5 filter buttons working |
 | Our Story | Not started | Copy locked in `PRD.md` §12 (T2.5) |
 | Gallery (lightbox) | Not started | 6 images (T2.6) + lightbox (T4.4) |
 | Visit Us (address, hours, map) | Not started | Map decided: OpenStreetMap iframe (T2.7) |
