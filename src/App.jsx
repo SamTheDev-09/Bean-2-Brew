@@ -1,26 +1,29 @@
+import Header from './components/Header'
+import Hero from './components/Hero'
+
 function App() {
   return (
     <>
       <div id="top"></div>
-      <header>Header (T2.1)</header>
+      <Header />
       <main>
-        <section id="hero"></section>
-        <section id="menu">
+        <Hero />
+        <section id="menu" className="scroll-mt-20">
           <h2>What We're Pouring</h2>
         </section>
-        <section id="story">
+        <section id="story" className="scroll-mt-20">
           <h2>Why We Started Pouring</h2>
         </section>
-        <section id="gallery">
+        <section id="gallery" className="scroll-mt-20">
           <h2>A Look Inside</h2>
         </section>
-        <section id="visit">
+        <section id="visit" className="scroll-mt-20">
           <h2>Come Say Hi</h2>
         </section>
-        <section id="newsletter">
+        <section id="newsletter" className="scroll-mt-20">
           <h2>Stay in the Loop</h2>
         </section>
-        <section id="contact">
+        <section id="contact" className="scroll-mt-20">
           <h2>Say Hello</h2>
         </section>
       </main>

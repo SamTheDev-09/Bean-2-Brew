@@ -2,9 +2,9 @@
 
 > Update this file at the end of every task. Keep entries short and factual — this is a tracker, not a journal. The build agent reads it at the start of every loop iteration.
 
-**Last updated:** 2026-09-26 (T0.0-T0.2 complete; moving to Phase 1)
+**Last updated:** 2026-09-26 (Phase 1 complete; moving to Phase 2)
 
-**Overall phase:** Phase 1 — Design system & assets
+**Overall phase:** Phase 2 — Static skeleton
 
 ## Section-by-section status
 
