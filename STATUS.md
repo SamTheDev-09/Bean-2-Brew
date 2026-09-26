@@ -2,9 +2,9 @@
 
 > Update this file at the end of every task. Keep entries short and factual — this is a tracker, not a journal. The build agent reads it at the start of every loop iteration.
 
-**Last updated:** 2026-09-25 (docs refined + scaffold committed by the planning agent)
+**Last updated:** 2026-09-26 (T0.0-T0.2 complete; moving to Phase 1)
 
-**Overall phase:** Phase 0 — awaiting T0.1 (`npm install` + build check)
+**Overall phase:** Phase 1 — Design system & assets
 
 ## Section-by-section status
 
@@ -26,7 +26,7 @@
 | Analytics placeholder hook | Not started | T5.3 |
 | Mobile performance pass | Not started | T2.12 + T4.6 + T5.4/T5.5 |
 | Deployment (Vercel/Netlify) | Not started | T6.4 (conditional on authenticated CLI) |
-| Images (SVG placeholder set) | In progress | T1.3 creates 8 SVGs; T1.4 optional image-worker upgrade (model TBD) |
+| Images (SVG placeholder set) | Done | T1.3: 8 hand-drawn SVGs created; T1.4: image worker not configured (SVG placeholders in use) |
 
 ## Status legend
 

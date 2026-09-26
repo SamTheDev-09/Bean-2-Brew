@@ -1,0 +1,13 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g4-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B2A20;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C8B6F;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g4-grad)"/>
+  <path d="M 500 300 Q 500 350 550 350 L 550 450 Q 500 450 500 500" fill="none" stroke="#F5EDE2" stroke-width="3" opacity="0.5"/>
+  <path d="M 600 280 L 600 320 M 580 300 L 620 300" fill="none" stroke="#F5EDE2" stroke-width="2" opacity="0.6"/>
+  <path d="M 650 300 L 650 340 M 630 320 L 670 320" fill="none" stroke="#F5EDE2" stroke-width="2" opacity="0.6"/>
+  <text x="1120" y="780" font-family="serif" font-size="14" fill="#F5EDE2" opacity="0.7">Bean 2 Brew</text>
+</svg>
